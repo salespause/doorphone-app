@@ -4,7 +4,7 @@
   "description": "Audio streaming over WebSocket",
   "private": true,
   "scripts": {
-    "start": "node server/index.js",
+    "start": "npm run build && node server/index.js",
     "build-js:pub": "browserify ./src/pub/main.js -o ./dist/publish/app.js",
     "build-js:sub": "browserify ./src/sub/main.js -o ./dist/subscribe/app.js",
     "build-js": "npm run build-js:pub && npm run build-js:sub",
