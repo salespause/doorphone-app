@@ -48,7 +48,6 @@ module.exports = {
         { audio: true },
         (stream) => {
           this._onMicStream(stream);
-          console.log("Calls startPub()");
           this.$data.chName = 1;
           this.startPub();
         },
@@ -84,8 +83,6 @@ module.exports = {
     startPub() {
       if (!this.state.isMicOn) { return; }
       if (this.state.isPub) { return; }
-
-      console.log("stratPub(): call postMessage to worker");
 
       this.state.isPub = true;
       this.$data._worker.postMessage({
