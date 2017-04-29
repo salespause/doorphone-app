@@ -14,6 +14,9 @@ module.exports = {
     _stream: null,
     _ctx:    null,
 
+    noFilter: true,
+    chName:   '',
+
     _audio:  {
       source:    null,
       processor: null,
@@ -27,10 +30,7 @@ module.exports = {
       isPub:   false,
 
       isSubscriberJoined: false
-    },
-
-    noFilter: true,
-    chName:   ''
+    }
   },
 
   events: {

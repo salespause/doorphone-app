@@ -13,18 +13,22 @@ module.exports = {
     _ctx:    null,
     _worker: null,
     _startTime: 0,
+
+    ch:     {},
+    chName: '',
+    volume: 50,
+
     _audio: {
       gain: null
     },
+
     _watch: {
       volume: null
     },
+
     state: {
       isSub: false
-    },
-    ch:     {},
-    chName: '',
-    volume: 50
+    }
   },
 
   computed: {
@@ -40,9 +44,7 @@ module.exports = {
   },
 
   events: {
-    'hook:created': function() {
-      this._hookCreated();
-    }
+    'hook:created': function() {vthis._hookCreated(); }
   },
 
   methods: {
