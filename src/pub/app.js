@@ -43,9 +43,18 @@ module.exports = {
 
   ready() {
     this.onMic();
+    this.sendNotification();
   },
 
   methods: {
+    sendNotification() {
+      const http = new XMLHttpRequest();
+      http.open("get", SOCKET_SERVER + "/notify/all", true);
+      http.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+      http.setRequestHeader("auth-secret", "dekitango");
+      http.send();
+    },
+
     onMic() {
       if (this.state.isMicOn) { return; }
 
