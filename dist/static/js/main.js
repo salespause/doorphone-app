@@ -1,6 +1,6 @@
-// var url = 'http://' + location.hostname + '/subscribe';
+var url = 'http://' + location.hostname + '/subscribe';
 // debug purpose
-var url = 'http://' + location.hostname + ':8080/subscribe';
+//var url = 'http://' + location.hostname + ':8080/subscribe';
 
 //Vapid public key.
 var applicationServerPublicKey = 'BBFpyJxiW0kRzE1l7a5jECOCtvYsEK5lOI6DXvKkIeyztqIPPBUCCMAwOIwQZaDKPWhRgTDq7WIQ2sNTjaPQoBo';
@@ -19,7 +19,7 @@ $(document).ready(function () {
             subscribe();
         }
     });
-    
+
     Notification.requestPermission().then(function (status) {
         if (status === 'denied') {
             console.log('[Notification.requestPermission] The user has blocked notifications.');
@@ -48,7 +48,7 @@ function handleSWRegistration(reg) {
     } else if (reg.active) {
         console.log('Service worker active');
     }
-    
+
     swRegistration = reg;
     initialiseState(reg);
 }
@@ -95,7 +95,7 @@ function initialiseState(reg) {
 function subscribe() {
     navigator.serviceWorker.ready.then(function (reg) {
         var subscribeParams = {userVisibleOnly: true};
-        
+
         //Setting the public key of our VAPID key pair.
         var applicationServerKey = urlB64ToUint8Array(applicationServerPublicKey);
         subscribeParams.applicationServerKey = applicationServerKey;
