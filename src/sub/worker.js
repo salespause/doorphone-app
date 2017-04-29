@@ -22,6 +22,9 @@ module.exports = function(self) {
     case 'AUDIO_OFF':
       socket.off('audio', __handleAudioBufferMsg);
       break;
+    case 'AUDIO': // Send audio
+      socket.emit('audio', payload.data);
+      break;
     }
   });
 
