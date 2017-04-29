@@ -4,3 +4,8 @@ applications:
     random-remote: true
     memory: 256M
     command: "npm run build && npm start"
+    env: 
+      VAPID_SUBJECT: mailto:shunkin@sfc.wide.ad.jp
+      VAPID_PUBLIC_KEY: BBFpyJxiW0kRzE1l7a5jECOCtvYsEK5lOI6DXvKkIeyztqIPPBUCCMAwOIwQZaDKPWhRgTDq7WIQ2sNTjaPQoBo
+      VAPID_PRIVATE_KEY: WWFKIpstH2GJAc5aRd5E5LmG2PlV-oVnRIBq-QxmtiI
+      AUTH_SECRET: dekitango
