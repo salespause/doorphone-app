@@ -3,3 +3,5 @@
 /dist/publish/app.js
 /dist/subscribe/app.js
 !/dist/.keep
+
+.envrc
