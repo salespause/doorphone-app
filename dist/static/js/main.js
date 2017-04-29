@@ -1,4 +1,4 @@
-var url = 'http://' + location.hostname + '/subscribe';
+var url = 'https://' + location.hostname + '/subscribe';
 // debug purpose
 //var url = 'http://' + location.hostname + ':8080/subscribe';
 
