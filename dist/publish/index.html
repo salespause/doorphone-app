@@ -27,6 +27,9 @@
         margin-top: 90px;
         font-size: 60px;
       }
+      .short-margin-top {
+        margin-top: 70px;
+      }
 
       .spinner {
         margin: 0px auto;
@@ -40,7 +43,6 @@
       }
       .dialog-box .text {
         animation: blinking 3s infinite;
-        padding-bottom: 10px;
       }
       @keyframes blinking {
         100% {
@@ -55,6 +57,9 @@
         width: 160px;
       }
 
+      .audio-spectrum {
+        margin-top: 20px;
+      }
     </style>
   </head>
 
@@ -110,11 +115,14 @@
       </label>
       -->
 
-      <template v-if="state.isSubscriberJoined"> <!-- DEBUG: -->
-        <div class="dialog-box">
+      <template v-if="state.isSubscriberJoined">
+        <div class="dialog-box short-margin-top">
           <img class="receiver-picture" src="https://almsaeedstudio.com/themes/AdminLTE/dist/img/user2-160x160.jpg" />
           <div class="text">
             Talking
+          </div>
+          <div class="audio-spectrum">
+            <canvas v-show="state.isMicOn" v-el:canvas></canvas>
           </div>
         </div>
       </template>
@@ -133,12 +141,6 @@
         </div>
       </template>
 
-      <!--
-      <div class="audio-spectrum">
-        <p v-show="!state.isMicOn">Audio spectrum will be shown below.</p>
-        <canvas v-show="state.isMicOn" v-el:canvas></canvas>
-      </div>
-      -->
     </section>
     <script src="./app.js"></script>
   </body>
