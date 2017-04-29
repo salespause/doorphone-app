@@ -9,6 +9,19 @@ module.exports = function(self) {
     switch (payload.type) {
     case 'INIT':
       socket = io(payload.data.SOCKET_SERVER);
+
+      // "sub:joined" is an event which comes from a backend server
+      // when a new subscriber is **joined** to the belonging channel.
+      socket.on("sub:joined", (socketId) => {
+        self.postMessage({ type: "sub:joined", data: socketId });
+      });
+
+      // "sub:left" is an event which comes from a backend server
+      // when a new subscriber is **left** from the belonging channel.
+      socket.on("sub:left", (socketId) => {
+        self.postMessage({ type: "sub:left", data: socketId });
+      });
+
       break;
     case 'CH':
       socket.emit('pub:ch', payload.data);

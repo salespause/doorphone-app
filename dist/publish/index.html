@@ -35,6 +35,9 @@
       }
 
       .dialog-box .text {
+
+      }
+      .dialog-box .blinking-text {
         animation: blinking 1.2s infinite;
         padding-top: 90px;
       }
@@ -42,6 +45,16 @@
         100% {
           opacity: 0;
         }
+      }
+
+      .receiver-picture {
+        margin-top: 30px;
+        border-radius: 100px;
+        height: 160px;
+        width: 160px;
+      }
+      .text {
+        padding-bottom: 10px;
       }
     </style>
   </head>
@@ -98,18 +111,28 @@
       </label>
       -->
 
-      <div class="dialog-box">
-        <div class="text">
-          Calling Now ...
+      <template v-if="state.isSubscriberJoined"> <!-- DEBUG: -->
+        <div class="dialog-box">
+          <img class="receiver-picture" src="https://almsaeedstudio.com/themes/AdminLTE/dist/img/user2-160x160.jpg" />
+          <div class="text">
+            Talking
+          </div>
         </div>
-        <div class="spinner">
-          <div class="rect1"></div>
-          <div class="rect2"></div>
-          <div class="rect3"></div>
-          <div class="rect4"></div>
-          <div class="rect5"></div>
+      </template>
+      <template v-else>
+        <div class="dialog-box">
+          <div class="blinking-text">
+            Calling Now ...
+          </div>
+          <div class="spinner">
+            <div class="rect1"></div>
+            <div class="rect2"></div>
+            <div class="rect3"></div>
+            <div class="rect4"></div>
+            <div class="rect5"></div>
+          </div>
         </div>
-      </div>
+      </template>
 
       <!--
       <div class="audio-spectrum">

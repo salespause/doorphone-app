@@ -24,7 +24,9 @@ module.exports = {
 
     state: {
       isMicOn: false,
-      isPub:   false
+      isPub:   false,
+
+      isSubscriberJoined: false
     },
 
     noFilter: true,
@@ -180,11 +182,24 @@ module.exports = {
     _hookCreated() {
       this.$data._ctx = new window.AudioContext();
       this.$data._worker = work(require('./worker.js'));
+
+      // Set up a handler to get messages from WebWorker
+      this.$data._worker.addEventListener('message', (e) => {
+        switch (e.data.type) {
+          case "sub:joined":
+            console.log("joined!");
+            this.$data.state.isSubscriberJoined = true;
+            break;
+          case "sub:left":
+            console.log("left!");
+            location.href = "/app";
+            break;
+        }
+      });
+
       this.$data._worker.postMessage({
         type: 'INIT',
-        data: {
-          SOCKET_SERVER: SOCKET_SERVER
-        }
+        data: { SOCKET_SERVER }
       });
     },
 

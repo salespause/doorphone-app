@@ -24,7 +24,7 @@ module.exports = {
     },
     ch:     {},
     chName: '',
-    volume: 80
+    volume: 50
   },
 
   computed: {
@@ -49,6 +49,7 @@ module.exports = {
     startSub: function() {
       if (this.state.isSub) { return; }
 
+      // Execute joining to the channel
       this.$data._worker.postMessage({
         type: 'SUB_JOIN',
         data: this.chName
@@ -99,9 +100,7 @@ module.exports = {
       $data._worker.addEventListener('message', this._handleWorkerMsg);
       $data._worker.postMessage({
         type: 'INIT',
-        data: {
-          SOCKET_SERVER: SOCKET_SERVER
-        }
+        data: { SOCKET_SERVER }
       });
     },
 
@@ -109,7 +108,7 @@ module.exports = {
       var $data = this.$data;
       var payload = ev.data;
       switch (payload.type) {
-      case 'ch':
+      case 'ch': // Update the available channel list
         $data.ch = payload.data;
         break;
       case 'audio':

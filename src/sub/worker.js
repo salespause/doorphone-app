@@ -10,7 +10,7 @@ module.exports = function(self) {
     case 'INIT':
       _init(payload.data);
       break;
-    case 'SUB_JOIN':
+    case 'SUB_JOIN': // Execute joining to the channel
       _subJoin(payload.data);
       break;
     case 'SUB_LEAVE':
@@ -21,6 +21,9 @@ module.exports = function(self) {
 
   function _init(data) {
     socket = io(data.SOCKET_SERVER);
+
+    // This "ch" event is triggered when a list of channels
+    // is updated in the server.
     socket.on('ch', function(ch) {
       self.postMessage({
         type: 'ch',
@@ -35,6 +38,7 @@ module.exports = function(self) {
       });
     });
 
+    // Registering a subscriber to the server
     socket.emit('sub:connect');
   }
 
