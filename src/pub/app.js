@@ -1,4 +1,5 @@
 'use strict';
+
 var util  = require('../common/util');
 var Const = require('../common/const');
 var work = require('webworkify');
@@ -8,10 +9,12 @@ var BUFFER_SIZE   = Const.BUFFER_SIZE;
 
 module.exports = {
   el: '#jsPubApp',
+
   data: {
     _worker: null,
     _stream: null,
     _ctx:    null,
+
     _audio:  {
       source:    null,
       processor: null,
@@ -19,17 +22,21 @@ module.exports = {
       analyser:  null,
       gain:      null
     },
+
     state: {
       isMicOn: false,
       isPub:   false
     },
+
     noFilter: true,
     chName:   ''
   },
+
   events: {
     'hook:created':  function() { this._hookCreated(); },
     'hook:attached': function() { this._hookAttached(); }
   },
+
   methods: {
     onMic: function() {
       var that = this;

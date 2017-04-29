@@ -1,4 +1,5 @@
 'use strict';
+
 var util  = require('../common/util');
 var Const = require('../common/const');
 var work = require('webworkify');
@@ -8,6 +9,7 @@ var BUFFER_SIZE   = Const.BUFFER_SIZE;
 
 module.exports = {
   el: '#jsSubApp',
+
   data: {
     _ctx:    null,
     _worker: null,
@@ -25,12 +27,15 @@ module.exports = {
     chName: '',
     volume: 0
   },
+
   computed: {
     hasCh: function() { return Object.keys(this.ch).length !== 0; }
   },
+
   events: {
     'hook:created':  function() { this._hookCreated(); }
   },
+
   methods: {
     startSub: function() {
       if (this.state.isSub) { return; }
@@ -125,4 +130,3 @@ module.exports = {
     }
   }
 };
-
