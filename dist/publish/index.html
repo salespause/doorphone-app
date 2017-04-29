@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  <title>Publisher</title>
+  <!-- <link rel="stylesheet" href="./app.css"> -->
+</head>
+<body>
+
+  <section id="jsPubApp" class="container">
+    <h2>PubApp</h2>
+    <p>
+      You are the publisher.
+      <br>
+      To punlish your audio stream, turn your mic ON, set #ch name and push START!
+    </p>
+
+    <h3>Mic</h3>
+
+    <button
+      class="button"
+      :class="{ 'button-outline': !state.isMicOn }"
+      @click="onMic"
+      :disabled="state.isMicOn"
+    >On</button>
+    <button
+      class="button"
+      :class="{ 'button-outline': state.isMicOn }"
+      @click="offMic"
+      :disabled="!state.isMicOn"
+    >Off</button>
+
+    <h3>Publish</h3>
+
+    <input
+      type="text"
+      v-model="chName"
+      placeholder="Set #ch name."
+      :disabled="state.isPub"
+    >
+
+    <button
+      class="button"
+      :class="{ 'button-outline': !state.isPub }"
+      @click="startPub"
+      :disabled="state.isPub || chName.length === 0"
+    >Start</button>
+    <button
+      class="button"
+      :class="{ 'button-outline': state.isPub }"
+      @click="stopPub"
+      :disabled="!state.isPub"
+    >Stop</button>
+
+    <label>
+      <input
+        type="checkbox"
+        v-model="noFilter"
+        :disabled="!state.isPub"
+        @change="toggleFilter"
+      >use filter
+    </label>
+
+    <h3>Audio In</h3>
+    <p v-show="!state.isMicOn">Audio spectrum will be shown below.</p>
+    <canvas v-show="state.isMicOn" v-el:canvas></canvas>
+
+  </section>
+
+  <script src="./app.js"></script>
+</body>
+</html>
