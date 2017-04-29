@@ -1,11 +1,11 @@
 'use strict';
 
-var util  = require('../common/util');
-var Const = require('../common/const');
-var work = require('webworkify');
+const util  = require('../common/util');
+const work = require('webworkify');
 
-var SOCKET_SERVER = Const.SOCKET_SERVER;
-var BUFFER_SIZE   = Const.BUFFER_SIZE;
+const CONSTANTS = require('../common/const');
+const SOCKET_SERVER = CONSTANTS.SOCKET_SERVER;
+const BUFFER_SIZE   = CONSTANTS.BUFFER_SIZE;
 
 module.exports = {
   el: '#jsPubApp',
