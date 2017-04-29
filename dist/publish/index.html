@@ -65,55 +65,6 @@
 
   <body>
     <section id="jsPubApp" class="container">
-      <!--
-      <button
-        class="button"
-        :class="{ 'button-outline': !state.isMicOn }"
-        @click="onMic"
-        :disabled="state.isMicOn"
-      >On</button>
-      <button
-        class="button"
-        :class="{ 'button-outline': state.isMicOn }"
-        @click="offMic"
-        :disabled="!state.isMicOn"
-      >Off</button>
-      -->
-
-      <!--
-      <input
-        type="text"
-        v-model="chName"
-        placeholder="Set #ch name."
-        :disabled="state.isPub"
-      >
-      -->
-
-      <!--
-      <button
-        class="button"
-        :class="{ 'button-outline': !state.isPub }"
-        @click="startPub"
-        :disabled="state.isPub || chName.length === 0"
-      >Start</button>
-      <button
-        class="button"
-        :class="{ 'button-outline': state.isPub }"
-        @click="stopPub"
-        :disabled="!state.isPub"
-      >Stop</button>
-      -->
-
-      <!--
-      <label>
-        <input
-          type="checkbox"
-          v-model="noFilter"
-          :disabled="!state.isPub"
-          @change="toggleFilter"
-        >use filter
-      </label>
-      -->
 
       <template v-if="state.isSubscriberJoined">
         <div class="dialog-box short-margin-top">
@@ -126,6 +77,7 @@
           </div>
         </div>
       </template>
+
       <template v-else>
         <div class="dialog-box">
           <div class="blinking-text">

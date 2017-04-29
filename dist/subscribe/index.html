@@ -21,24 +21,6 @@
     <section id="jsSubApp" class="container">
       <img id="visitor-streaming" v-bind:src="uv4lHost" />
 
-      <!--
-      <div class="row">
-        <label>
-          <p class="column" v-show="!hasCh">No publishers.</p>
-        </label>
-        <label class="column" v-for="_ch in ch">
-          <input
-            type="radio"
-            name="ch"
-            v-model="chName"
-            :disabled="state.isSub"
-            value="{{$key}}"
-          >
-          {{$key}}
-        </label>
-      </div>
-      -->
-
       <button
         class="button"
         :class="{ 'button-outline': !state.isSub }"
@@ -52,24 +34,7 @@
         @click="stopSub"
       >Stop</button>
 
-      <!--
-      <h3>Volume</h3>
-      <input
-        type="range"
-        min="0"
-        max="1"
-        step="0.1"
-        v-model="volume"
-      >
-      <button
-        class="button"
-        :class="{ 'button-outline': volume !== 0 }"
-        :disabled="volume === 0"
-        @click="volume = 0"
-      >Mute</button>
-      -->
     </section>
-
     <script src="./app.js"></script>
   </body>
 </html>
