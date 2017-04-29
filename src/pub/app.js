@@ -88,30 +88,23 @@ module.exports = {
       this.$data._stream = stream;
       this.state.isMicOn = true;
 
-      var ctx = this.$data._ctx;
-      var audio = this.$data._audio;
+      const ctx = this.$data._ctx;
+      const audio = this.$data._audio;
 
-      // マイク
       audio.source = ctx.createMediaStreamSource(this.$data._stream);
 
-      // 電話くらいの品質にしておく
       audio.filter = ctx.createBiquadFilter();
       audio.filter.type = 'bandpass';
-      // アナログ電話は300Hz ~ 3.4kHz / ひかり電話は100Hz ~ 7kHz
       audio.filter.frequency.value = (100 + 7000) / 2;
-      // 固定ならだいたい聴き良いのがこれくらい・・？
       audio.filter.Q.value = 0.25;
 
-      // マイクレベル確認用
       audio.analyser = ctx.createAnalyser();
       audio.analyser.smoothingTimeConstant = 0.4;
       audio.analyser.fftSize = BUFFER_SIZE;
 
-      // 音質には期待しないのでモノラルで飛ばす
       audio.processor = ctx.createScriptProcessor(BUFFER_SIZE, 1, 1);
       audio.processor.onaudioprocess = this._onAudioProcess;
 
-      // 自分のフィードバックいらない
       audio.gain = ctx.createGain();
       audio.gain.gain.value = 0;
 
@@ -123,10 +116,10 @@ module.exports = {
     },
 
     _onAudioProcess(ev) {
-      var inputBuffer  = ev.inputBuffer;
-      var outputBuffer = ev.outputBuffer;
-      var inputData  = inputBuffer.getChannelData(0);
-      var outputData = outputBuffer.getChannelData(0);
+      const inputBuffer  = ev.inputBuffer;
+      const outputBuffer = ev.outputBuffer;
+      const inputData  = inputBuffer.getChannelData(0);
+      const outputData = outputBuffer.getChannelData(0);
 
       // Bypassしつつ飛ばす
       outputData.set(inputData);
