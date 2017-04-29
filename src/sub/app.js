@@ -1,11 +1,10 @@
 'use strict';
 
-var util  = require('../common/util');
-var work = require('webworkify');
+const util  = require('../common/util');
+const work = require('webworkify');
 
-var CONSTANTS = require('../common/const');
-var SOCKET_SERVER = CONSTANTS.SOCKET_SERVER;
-var BUFFER_SIZE   = CONSTANTS.BUFFER_SIZE;
+const SOCKET_SERVER = `${location.protocol}//${location.host}`;
+const BUFFER_SIZE = 1024;
 
 module.exports = {
   el: '#jsSubApp',

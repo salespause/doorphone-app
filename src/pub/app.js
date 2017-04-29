@@ -3,9 +3,8 @@
 const util  = require('../common/util');
 const work = require('webworkify');
 
-const CONSTANTS = require('../common/const');
-const SOCKET_SERVER = CONSTANTS.SOCKET_SERVER;
-const BUFFER_SIZE   = CONSTANTS.BUFFER_SIZE;
+const SOCKET_SERVER = `${location.protocol}//${location.host}`;
+const BUFFER_SIZE = 1024;
 
 module.exports = {
   el: '#jsPubApp',
