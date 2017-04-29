@@ -5,9 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <title>Publisher</title>
     <link ref="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/6.0.0/normalize.min.css" />
+    <link href="//fonts.googleapis.com/css?family=Orbitron" rel='stylesheet' type='text/css'>
     <style>
+      html, body {
+        font-family: 'Orbitron', sans-serif;
+        user-select: none;
+        background-color: black;
+      }
       #jsPubApp {
         text-align: center;
+      }
+      .dialog-box {
+        background-color: grey;
+        padding: 0px 0px;
+        text-decoration: none;
+        box-shadow: gainsboro 5px 5px 1px;
+        line-height: 5;
+        color: white;
+        margin-top: 90px;
+        font-size: 60px;
       }
     </style>
   </head>
@@ -64,10 +80,16 @@
       </label>
       -->
 
+      <div class="dialog-box">
+        Calling Now ...
+      </div>
+
+      <!--
       <div class="audio-spectrum">
-        <!-- <p v-show="!state.isMicOn">Audio spectrum will be shown below.</p> -->
+        <p v-show="!state.isMicOn">Audio spectrum will be shown below.</p>
         <canvas v-show="state.isMicOn" v-el:canvas></canvas>
       </div>
+      -->
     </section>
     <script src="./app.js"></script>
   </body>
