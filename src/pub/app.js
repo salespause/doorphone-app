@@ -15,7 +15,7 @@ module.exports = {
     _ctx:    null,
 
     noFilter: true,
-    chName:   '',
+    chName:   '1',
 
     _audio:  {
       source:    null,
@@ -49,7 +49,6 @@ module.exports = {
         { audio: true },
         (stream) => {
           this._onMicStream(stream);
-          this.$data.chName = 1;
           this.startPub();
         },
         (err) => {
