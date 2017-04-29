@@ -141,6 +141,40 @@ module.exports = {
 
     _onChangeVolume(val) {
       this.$data._audio.gain.gain.value = val;
+    },
+
+    //
+    // Set up a mic
+    //
+    _onMicStream: function(stream) {
+      this.$data._stream = stream;
+      this.state.isMicOn = true;
+
+      const ctx = this.$data._ctx;
+      const audio = this.$data._audio;
+
+      audio.source = ctx.createMediaStreamSource(this.$data._stream);
+
+      audio.filter = ctx.createBiquadFilter();
+      audio.filter.type = 'bandpass';
+      audio.filter.frequency.value = (100 + 7000) / 2;
+      audio.filter.Q.value = 0.25;
+
+      audio.analyser = ctx.createAnalyser();
+      audio.analyser.smoothingTimeConstant = 0.4;
+      audio.analyser.fftSize = BUFFER_SIZE;
+
+      audio.processor = ctx.createScriptProcessor(BUFFER_SIZE, 1, 1);
+      audio.processor.onaudioprocess = this._onAudioProcess;
+
+      audio.gain = ctx.createGain();
+      audio.gain.gain.value = 0;
+
+      audio.source.connect(audio.filter);
+      audio.filter.connect(audio.processor);
+      audio.processor.connect(audio.analyser);
+      audio.processor.connect(audio.gain);
+      audio.gain.connect(ctx.destination);
     }
   }
 };
