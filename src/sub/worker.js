@@ -54,6 +54,5 @@ module.exports = function(self) {
       data: buf
     });
   }
-
 };
 
