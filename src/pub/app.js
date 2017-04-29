@@ -190,8 +190,9 @@ module.exports = {
       var $canvas = this.$els.canvas;
       $canvas.width  = window.innerWidth * 2;
       $canvas.height = $canvas.width / 10;
-      $canvas.style.width  = '100%';
+      $canvas.style.width  = '70%';
       $canvas.style.height = '10%';
+      $canvas.style.backgroundColor = "gainsboro";
     }
   }
 };
