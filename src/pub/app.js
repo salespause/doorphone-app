@@ -49,16 +49,19 @@ module.exports = {
     onMic() {
       if (this.state.isMicOn) { return; }
 
-      navigator.getUserMedia(
-        { audio: true },
-        (stream) => {
-          this._onMicStream(stream);
-          this.startPub();
-        },
-        (err) => {
-          console.error(err);
-        }
-      );
+      /*
+      navigator.getUserMedia({ audio: true }, (stream) => {
+        this._onMicStream(stream);
+        this.startPub();
+      }, (err) => {
+        console.error(err);
+      });
+      */
+
+      // DEBUG!!!!!!!
+      this.state.isMicOn = true;
+      this.startPub();
+
     },
 
     offMic() {
@@ -76,28 +79,14 @@ module.exports = {
       if (!this.state.isMicOn || this.state.isPub) { return; }
       this.$data._worker.postMessage({ type: 'CH', data: this.chName });
       this.$data._worker.postMessage({ type: 'CH', data: this.chExchange });
+      this.$data._worker.postMessage({ type: 'AUDIO_ON' });
+      this._readyAudio();
       this.state.isPub = true;
     },
 
     stopPub() {
       if (!this.state.isPub) { return; }
       this.state.isPub = false;
-    },
-
-    _onAudioProcess(ev) {
-      const inputBuffer  = ev.inputBuffer;
-      const outputBuffer = ev.outputBuffer;
-      const inputData  = inputBuffer.getChannelData(0);
-      const outputData = outputBuffer.getChannelData(0);
-
-      // Bypassしつつ飛ばす
-      outputData.set(inputData);
-      if (this.state.isPub) {
-        this.$data._worker.postMessage({
-          type: 'AUDIO',
-          data: { buf: outputData.buffer, ch: this.chName }
-        });
-      }
     },
 
     _drawInputSpectrum() {
@@ -130,6 +119,8 @@ module.exports = {
 
       // Set up a handler to get messages from WebWorker
       this.$data._worker.addEventListener('message', (e) => {
+        const payload = e.data;
+
         switch (e.data.type) {
           case "sub:joined":
             console.log("joined!");
@@ -144,6 +135,9 @@ module.exports = {
           case "sub:left":
             console.log("left!");
             location.href = "/app";
+            break;
+          case "audio":
+            this._handleAudioBuffer(payload.data);
             break;
         }
       });
@@ -161,6 +155,17 @@ module.exports = {
       $canvas.style.width  = '50%';
       $canvas.style.height = '10%';
       $canvas.style.backgroundColor = "grey";
+    },
+
+    //
+    // ready audio
+    //
+    _readyAudio() {
+      var ctx = this.$data._ctx;
+      var audio = this.$data._audio;
+      audio.gain = ctx.createGain();
+      audio.gain.gain.value = this.volume;
+      audio.gain.connect(ctx.destination);
     },
 
     //
@@ -195,6 +200,50 @@ module.exports = {
       audio.processor.connect(audio.analyser);
       audio.processor.connect(audio.gain);
       audio.gain.connect(ctx.destination);
-    }
+    },
+
+    //
+    // onaudioproces handler to send an audio to channel
+    //
+    _onAudioProcess(ev) {
+      const inputBuffer  = ev.inputBuffer;
+      const outputBuffer = ev.outputBuffer;
+      const inputData  = inputBuffer.getChannelData(0);
+      const outputData = outputBuffer.getChannelData(0);
+
+      // Bypassしつつ飛ばす
+      outputData.set(inputData);
+      if (this.state.isPub) {
+        this.$data._worker.postMessage({
+          type: 'AUDIO',
+          data: { buf: outputData.buffer, ch: this.chName }
+        });
+      }
+    },
+
+    //
+    // Set up an output audio
+    //
+    _handleAudioBuffer(buf) {
+      const ctx = this.$data._ctx;
+      const audio = this.$data._audio;
+      const f32Audio = new Float32Array(buf);
+      const audioBuffer = ctx.createBuffer(1, BUFFER_SIZE, ctx.sampleRate);
+      const source = ctx.createBufferSource();
+
+      audioBuffer.getChannelData(0).set(f32Audio);
+
+      source.buffer = audioBuffer;
+      source.connect(audio.gain);
+
+      const currentTime = ctx.currentTime;
+      if (currentTime < this.$data._startTime) {
+        source.start(this.$data._startTime);
+        this.$data._startTime += audioBuffer.duration;
+      } else {
+        source.start(this.$data._startTime);
+        this.$data._startTime = currentTime + audioBuffer.duration;
+      }
+    },
   }
 };

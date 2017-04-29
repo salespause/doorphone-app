@@ -26,9 +26,21 @@ module.exports = function(self) {
     case 'CH':
       socket.emit('pub:ch', payload.data);
       break;
+    case 'AUDIO_ON':
+      socket.on('audio', __handleAudioBufferMsg);
+      break;
+    case 'AUDIO_OFF':
+      socket.off('audio', __handleAudioBufferMsg);
+      break;
     case 'AUDIO':
       socket.emit('audio', payload.data);
       break;
     }
   });
+
+  function __handleAudioBufferMsg(buf) {
+    console.log(buf)
+
+    self.postMessage({ type: 'audio', data: buf });
+  }
 };

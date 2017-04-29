@@ -63,12 +63,25 @@ module.exports = {
     startSub() {
       if (this.state.isSub) { return; }
 
-      this.$data._worker.postMessage({ type: 'SUB_JOIN', data: this.chName });
-      this.$data._worker.postMessage({ type: 'SUB_JOIN', data: this.chExchange });
-      this.$data._worker.postMessage({ type: 'AUDIO_ON' });
+      // Start publishing
+      navigator.getUserMedia({ audio: true }, (stream) => {
+        this._onMicStream(stream);
+        this.state.isPub = true;
 
-      this._readyAudio();
-      this.state.isSub = true;
+        this.$data._worker.postMessage({ type: 'SUB_JOIN', data: this.chName });
+        this.$data._worker.postMessage({ type: 'SUB_JOIN', data: this.chExchange });
+        this.$data._worker.postMessage({ type: 'AUDIO_ON' });
+
+        this._readyAudio();
+        this.state.isSub = true;
+
+        //
+        // Send a voice data
+        //
+
+      }, (err) => {
+        console.error(err);
+      });
     },
 
     stopSub() {
@@ -177,7 +190,7 @@ module.exports = {
     },
 
     //
-    // The handler of onaudioprocess
+    // The handler of onaudioprocess to send an audio to channel
     //
     _onAudioProcess(ev) {
       const inputBuffer  = ev.inputBuffer;
@@ -190,7 +203,7 @@ module.exports = {
       if (this.state.isPub) {
         this.$data._worker.postMessage({
           type: 'AUDIO',
-          data: { buf: outputData.buffer, ch: this.chName }
+          data: { buf: outputData.buffer, ch: this.chExchange }
         });
       }
     },
