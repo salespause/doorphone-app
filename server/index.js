@@ -40,7 +40,7 @@ if (!VAPID_SUBJECT) {
 }
 
 app.use("/app", express.static("dist"))
-app.use("/notificator_setting", express_statig("dist/notificator"));
+app.use("/notificator_setting", express_static("dist/notificator"));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
