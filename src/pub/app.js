@@ -55,11 +55,6 @@ module.exports = {
       }, (err) => {
         console.error(err);
       });
-
-      // DEBUG!!!!!!!
-      // this.state.isMicOn = true;
-      // this.startPub();
-
     },
 
     offMic() {
