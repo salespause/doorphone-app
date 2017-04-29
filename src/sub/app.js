@@ -12,7 +12,7 @@ module.exports = {
   data: {
     _ctx:    null,
     _worker: null,
-
+    _stream: null,
     _startTime: 0,
 
     ch:     {},
@@ -21,8 +21,12 @@ module.exports = {
     chName: '1',     // default
     chExchange: '2', // exchange
 
-    _audio: {
-      gain: null
+    _audio:  {
+      source:    null,
+      processor: null,
+      filter:    null,
+      analyser:  null,
+      gain:      null
     },
 
     state: {
@@ -59,12 +63,25 @@ module.exports = {
     startSub() {
       if (this.state.isSub) { return; }
 
-      this.$data._worker.postMessage({ type: 'SUB_JOIN', data: this.chName });
-      this.$data._worker.postMessage({ type: 'SUB_JOIN', data: this.chExchange });
-      this.$data._worker.postMessage({ type: 'AUDIO_ON' });
+      // Start publishing
+      navigator.getUserMedia({ audio: true }, (stream) => {
+        this._onMicStream(stream);
+        this.state.isPub = true;
 
-      this._readyAudio();
-      this.state.isSub = true;
+        this.$data._worker.postMessage({ type: 'SUB_JOIN', data: this.chName });
+        this.$data._worker.postMessage({ type: 'SUB_JOIN', data: this.chExchange });
+        this.$data._worker.postMessage({ type: 'AUDIO_ON' });
+
+        this._readyAudio();
+        this.state.isSub = true;
+
+        //
+        // Send a voice data
+        //
+
+      }, (err) => {
+        console.error(err);
+      });
     },
 
     stopSub() {
@@ -132,11 +149,63 @@ module.exports = {
 
     _resetAudio() {
       util.disconnectAll(this.$data._audio);
-      util.unwatchAll(this.$data._watch);
     },
 
     _onChangeVolume(val) {
       this.$data._audio.gain.gain.value = val;
-    }
+    },
+
+    //
+    // Set up a mic
+    //
+    _onMicStream: function(stream) {
+      this.$data._stream = stream;
+      this.state.isMicOn = true;
+
+      const ctx = this.$data._ctx;
+      const audio = this.$data._audio;
+
+      audio.source = ctx.createMediaStreamSource(this.$data._stream);
+
+      audio.filter = ctx.createBiquadFilter();
+      audio.filter.type = 'bandpass';
+      audio.filter.frequency.value = (100 + 7000) / 2;
+      audio.filter.Q.value = 0.25;
+
+      audio.analyser = ctx.createAnalyser();
+      audio.analyser.smoothingTimeConstant = 0.4;
+      audio.analyser.fftSize = BUFFER_SIZE;
+
+      audio.processor = ctx.createScriptProcessor(BUFFER_SIZE, 1, 1);
+      audio.processor.onaudioprocess = this._onAudioProcess;
+
+      audio.gain = ctx.createGain();
+      audio.gain.gain.value = 0;
+
+      audio.source.connect(audio.filter);
+      audio.filter.connect(audio.processor);
+      audio.processor.connect(audio.analyser);
+      audio.processor.connect(audio.gain);
+      audio.gain.connect(ctx.destination);
+    },
+
+    //
+    // The handler of onaudioprocess to send an audio to channel
+    //
+    _onAudioProcess(ev) {
+      const inputBuffer  = ev.inputBuffer;
+      const outputBuffer = ev.outputBuffer;
+      const inputData  = inputBuffer.getChannelData(0);
+      const outputData = outputBuffer.getChannelData(0);
+
+      // Bypassしつつ飛ばす
+      outputData.set(inputData);
+      if (this.state.isPub) {
+        this.$data._worker.postMessage({
+          type: 'AUDIO',
+          data: { buf: outputData.buffer, ch: this.chExchange }
+        });
+      }
+    },
   }
 };
