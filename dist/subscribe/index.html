@@ -6,8 +6,11 @@
     <title>Subscriber</title>
     <link ref="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/6.0.0/normalize.min.css" />
     <style>
+      #jsSubApp {
+        text-align: center;
+      }
       #visitor-streaming {
-        width: 500px;
+        width: 600px;
         height: 400px;
         background-color: gainsboro;
       }
@@ -47,6 +50,7 @@
         @click="stopSub"
       >Stop</button>
 
+      <!--
       <h3>Volume</h3>
       <input
         type="range"
@@ -61,6 +65,7 @@
         :disabled="volume === 0"
         @click="volume = 0"
       >Mute</button>
+      -->
     </section>
 
     <script src="./app.js"></script>
