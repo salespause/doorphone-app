@@ -34,8 +34,7 @@ module.exports = {
   },
 
   events: {
-    'hook:created':  function() { this._hookCreated(); }
-    // 'hook:attached': function() { this._hookAttached(); }
+    'hook:created': function() { this._hookCreated(); }
   },
 
   ready() {
@@ -134,8 +133,6 @@ module.exports = {
       audio.processor.connect(audio.analyser);
       audio.processor.connect(audio.gain);
       audio.gain.connect(ctx.destination);
-
-      // this._drawInputSpectrum();
     },
 
     _onAudioProcess(ev) {
@@ -154,7 +151,6 @@ module.exports = {
       }
     },
 
-    /*
     _drawInputSpectrum() {
       if (!this.$data._audio.analyser) { return; }
 
@@ -175,9 +171,9 @@ module.exports = {
         drawContext.fillStyle = 'hsl(' + (i / fbc * 360) + ', 100%, 50%)';
         drawContext.fillRect(i * barWidth, offset, barWidth + 1, height);
       }
+
       requestAnimationFrame(this._drawInputSpectrum);
     },
-    */
 
     _hookCreated() {
       this.$data._ctx = new window.AudioContext();
@@ -188,7 +184,13 @@ module.exports = {
         switch (e.data.type) {
           case "sub:joined":
             console.log("joined!");
+
             this.$data.state.isSubscriberJoined = true;
+            this.$nextTick(() => {
+              this._setupSpectrumCanavas();
+              this._drawInputSpectrum();
+            });
+
             break;
           case "sub:left":
             console.log("left!");
@@ -203,15 +205,13 @@ module.exports = {
       });
     },
 
-    /*
-    _hookAttached() {
+    _setupSpectrumCanvas() {
       var $canvas = this.$els.canvas;
       $canvas.width = window.innerWidth * 2;
       $canvas.height = $canvas.width / 10;
-      $canvas.style.width  = '70%';
+      $canvas.style.width  = '50%';
       $canvas.style.height = '10%';
-      $canvas.style.backgroundColor = "gainsboro";
+      $canvas.style.backgroundColor = "grey";
     }
-    */
   }
 };
