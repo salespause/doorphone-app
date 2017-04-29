@@ -19,13 +19,8 @@
     "vue": "^1.0.25"
   },
   "devDependencies": {
-    "webworkify": "^1.1.0",
-    "autoprefixer": "^6.3.3",
+    "babelify": "^7.3.0",
     "browserify": "^13.0.0",
-    "cssnano": "^3.5.2",
-    "parallelshell": "^2.0.0",
-    "postcss-cli": "^2.5.1",
-    "postcss-import": "^8.0.2",
-    "watchify": "^3.7.0"
+    "webworkify": "^1.1.0"
   }
 }
