@@ -48,6 +48,7 @@ module.exports = {
         type: 'SUB_JOIN',
         data: this.chName
       });
+
       this._readyAudio();
       this.state.isSub = true;
     },
@@ -59,6 +60,7 @@ module.exports = {
         type: 'SUB_LEAVE',
         data: this.chName
       });
+
       this._resetAudio();
       this.state.isSub = false;
     },
