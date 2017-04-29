@@ -24,7 +24,7 @@ module.exports = {
     },
     ch:     {},
     chName: '',
-    volume: 100
+    volume: 80
   },
 
   computed: {
