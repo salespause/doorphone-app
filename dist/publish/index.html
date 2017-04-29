@@ -4,12 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <title>Publisher</title>
-
     <link ref="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/6.0.0/normalize.min.css" />
+    <style>
+      #jsPubApp {
+        text-align: center;
+      }
+    </style>
   </head>
 
   <body>
     <section id="jsPubApp" class="container">
+      <!--
       <button
         class="button"
         :class="{ 'button-outline': !state.isMicOn }"
@@ -22,16 +27,18 @@
         @click="offMic"
         :disabled="!state.isMicOn"
       >Off</button>
+      -->
 
-      <h3>Publish</h3>
-
+      <!--
       <input
         type="text"
         v-model="chName"
         placeholder="Set #ch name."
         :disabled="state.isPub"
       >
+      -->
 
+      <!--
       <button
         class="button"
         :class="{ 'button-outline': !state.isPub }"
@@ -44,7 +51,9 @@
         @click="stopPub"
         :disabled="!state.isPub"
       >Stop</button>
+      -->
 
+      <!--
       <label>
         <input
           type="checkbox"
@@ -53,11 +62,12 @@
           @change="toggleFilter"
         >use filter
       </label>
+      -->
 
-      <h3>Audio In</h3>
-      <p v-show="!state.isMicOn">Audio spectrum will be shown below.</p>
-      <canvas v-show="state.isMicOn" v-el:canvas></canvas>
-
+      <div class="audio-spectrum">
+        <p v-show="!state.isMicOn">Audio spectrum will be shown below.</p>
+        <canvas v-show="state.isMicOn" v-el:canvas></canvas>
+      </div>
     </section>
     <script src="./app.js"></script>
   </body>
