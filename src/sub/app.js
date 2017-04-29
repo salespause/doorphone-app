@@ -48,7 +48,7 @@ module.exports = {
   },
 
   methods: {
-    startSub: function() {
+    startSub() {
       if (this.state.isSub) { return; }
 
       // Execute joining to the channel
@@ -61,7 +61,7 @@ module.exports = {
       this.state.isSub = true;
     },
 
-    stopSub: function() {
+    stopSub() {
       if (!this.state.isSub) { return; }
 
       this.$data._worker.postMessage({
@@ -73,7 +73,7 @@ module.exports = {
       this.state.isSub = false;
     },
 
-    _handleAudioBuffer: function(buf) {
+    _handleAudioBuffer(buf) {
       var ctx = this.$data._ctx;
       var audio = this.$data._audio;
       var f32Audio = new Float32Array(buf);
@@ -94,7 +94,7 @@ module.exports = {
       }
     },
 
-    _hookCreated: function() {
+    _hookCreated() {
       var $data = this.$data;
       $data._ctx = new window.AudioContext();
 
@@ -106,7 +106,7 @@ module.exports = {
       });
     },
 
-    _handleWorkerMsg: function(ev) {
+    _handleWorkerMsg(ev) {
       var $data = this.$data;
       var payload = ev.data;
       switch (payload.type) {
@@ -122,7 +122,7 @@ module.exports = {
       }
     },
 
-    _readyAudio: function() {
+    _readyAudio() {
       var ctx = this.$data._ctx;
       var audio = this.$data._audio;
       audio.gain = ctx.createGain();
@@ -132,12 +132,12 @@ module.exports = {
       this.$data._watch.volume = this.$watch('volume', this._onChangeVolume);
     },
 
-    _resetAudio: function() {
+    _resetAudio() {
       util.disconnectAll(this.$data._audio);
       util.unwatchAll(this.$data._watch);
     },
 
-    _onChangeVolume: function(val) {
+    _onChangeVolume(val) {
       this.$data._audio.gain.gain.value = val;
     }
   }
