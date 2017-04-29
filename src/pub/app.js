@@ -32,8 +32,8 @@ module.exports = {
   },
 
   events: {
-    'hook:created':  function() { this._hookCreated(); },
-    'hook:attached': function() { this._hookAttached(); }
+    'hook:created':  function() { this._hookCreated(); }
+    // 'hook:attached': function() { this._hookAttached(); }
   },
 
   ready() {
@@ -60,13 +60,10 @@ module.exports = {
 
     offMic() {
       if (!this.state.isMicOn) { return; }
-
       this.$data._stream.getTracks().forEach(function(t) { t.stop(); });
       this.$data._stream = null;
       this.state.isMicOn = false;
-
       util.disconnectAll(this.$data._audio);
-
       cancelAnimationFrame(this._drawInputSpectrum);
       this.stopPub();
     },
@@ -99,7 +96,6 @@ module.exports = {
 
     stopPub() {
       if (!this.state.isPub) { return; }
-
       this.state.isPub = false;
     },
 
@@ -140,7 +136,7 @@ module.exports = {
       audio.processor.connect(audio.gain);
       audio.gain.connect(ctx.destination);
 
-      this._drawInputSpectrum();
+      // this._drawInputSpectrum();
     },
 
     _onAudioProcess(ev) {
@@ -159,6 +155,7 @@ module.exports = {
       }
     },
 
+    /*
     _drawInputSpectrum() {
       if (!this.$data._audio.analyser) { return; }
 
@@ -181,6 +178,7 @@ module.exports = {
       }
       requestAnimationFrame(this._drawInputSpectrum);
     },
+    */
 
     _hookCreated() {
       this.$data._ctx = new window.AudioContext();
@@ -193,13 +191,15 @@ module.exports = {
       });
     },
 
+    /*
     _hookAttached() {
       var $canvas = this.$els.canvas;
-      $canvas.width  = window.innerWidth * 2;
+      $canvas.width = window.innerWidth * 2;
       $canvas.height = $canvas.width / 10;
       $canvas.style.width  = '70%';
       $canvas.style.height = '10%';
       $canvas.style.backgroundColor = "gainsboro";
     }
+    */
   }
 };
