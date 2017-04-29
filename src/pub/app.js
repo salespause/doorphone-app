@@ -10,12 +10,13 @@ module.exports = {
   el: '#jsPubApp',
 
   data: {
-    _worker: null,
-    _stream: null,
     _ctx:    null,
+    _worker: null,
 
-    noFilter: true,
-    chName:   '1', // default
+    _stream: null,
+
+    chName: '1',     // default
+    chExchange: '2', // exchange
 
     _audio:  {
       source:    null,
@@ -65,19 +66,6 @@ module.exports = {
       util.disconnectAll(this.$data._audio);
       cancelAnimationFrame(this._drawInputSpectrum);
       this.stopPub();
-    },
-
-    toggleFilter() {
-      if (!this.state.isPub) { return; }
-
-      var audio = this.$data._audio;
-      if (this.noFilter) {
-        audio.source.disconnect();
-        audio.source.connect(audio.processor);
-      } else {
-        audio.source.disconnect();
-        audio.source.connect(audio.filter);
-      }
     },
 
     startPub() {
