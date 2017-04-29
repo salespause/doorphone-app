@@ -6,12 +6,19 @@
     <title>Subscriber</title>
 
     <link ref="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/6.0.0/normalize.min.css" />
+    <style>
+      #visitor-streaming {
+        width: 400px;
+        height: 400px;
+        background-color: gainsboro;
+      }
+    </style>
   </head>
 
   <body>
-    <script src="https://cdn.jsdelivr.net/hls.js/latest/hls.min.js"></script>
-
     <section id="jsSubApp" class="container">
+      <img id="visitor-streaming" src="http://192.168.1.81:8090/stream/video.h264" />
+
       <div class="row">
         <label>
           <p class="column" v-show="!hasCh">No publishers.</p>
