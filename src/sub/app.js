@@ -29,11 +29,15 @@ module.exports = {
   },
 
   computed: {
-    hasCh: function() { return Object.keys(this.ch).length !== 0; }
+    hasCh: function() {
+      return Object.keys(this.ch).length !== 0;
+    }
   },
 
   events: {
-    'hook:created':  function() { this._hookCreated(); }
+    'hook:created': function() {
+      this._hookCreated();
+    }
   },
 
   methods: {
