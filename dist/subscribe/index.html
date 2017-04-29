@@ -21,6 +21,7 @@
     <section id="jsSubApp" class="container">
       <img id="visitor-streaming" v-bind:src="uv4lHost" />
 
+      <!--
       <div class="row">
         <label>
           <p class="column" v-show="!hasCh">No publishers.</p>
@@ -36,11 +37,12 @@
           {{$key}}
         </label>
       </div>
+      -->
 
       <button
         class="button"
         :class="{ 'button-outline': !state.isSub }"
-        :disabled="state.isSub || !chName"
+        :disabled="state.isSub || !state.isPublisherReady"
         @click="startSub"
       >Start</button>
       <button

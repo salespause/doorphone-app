@@ -15,7 +15,7 @@ module.exports = {
     _startTime: 0,
 
     ch:     {},
-    chName: '',
+    chName: '1', // default
     volume: 50,
 
     _audio: {
@@ -27,7 +27,8 @@ module.exports = {
     },
 
     state: {
-      isSub: false
+      isSub: false,
+      isPublisherReady: false
     }
   },
 
@@ -44,7 +45,15 @@ module.exports = {
   },
 
   events: {
-    'hook:created': function() {vthis._hookCreated(); }
+    'hook:created'() {
+      this.$data._ctx = new window.AudioContext();
+      this.$data._worker = work(require('./worker.js'));
+      this.$data._worker.addEventListener('message', this._handleWorkerMsg);
+      this.$data._worker.postMessage({
+        type: 'INIT',
+        data: { SOCKET_SERVER }
+      });
+    }
   },
 
   methods: {
@@ -94,24 +103,19 @@ module.exports = {
       }
     },
 
-    _hookCreated() {
-      var $data = this.$data;
-      $data._ctx = new window.AudioContext();
+    _handleWorkerMsg(e) {
+      const payload = e.data;
 
-      $data._worker = work(require('./worker.js'));
-      $data._worker.addEventListener('message', this._handleWorkerMsg);
-      $data._worker.postMessage({
-        type: 'INIT',
-        data: { SOCKET_SERVER }
-      });
-    },
-
-    _handleWorkerMsg(ev) {
-      var $data = this.$data;
-      var payload = ev.data;
       switch (payload.type) {
-      case 'ch': // Update the available channel list
-        $data.ch = payload.data;
+      case 'ch':
+        // Update the available channel list
+        // and here also indicates the status of publishe if he's ready or not
+        this.$data.ch = payload.data;
+
+        if (this.$data.ch["1"]) {
+          this.$data.state.isPublisherReady = true
+        }
+
         break;
       case 'audio':
         this._handleAudioBuffer(payload.data);
