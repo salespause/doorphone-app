@@ -36,21 +36,29 @@ module.exports = {
     'hook:attached': function() { this._hookAttached(); }
   },
 
+  ready() {
+    this.onMic();
+  },
+
   methods: {
-    onMic: function() {
-      var that = this;
-      if (that.state.isMicOn) { return; }
+    onMic() {
+      if (this.state.isMicOn) { return; }
 
       navigator.getUserMedia(
         { audio: true },
-        this._onMicStream,
-        function(err) {
+        (stream) => {
+          this._onMicStream(stream);
+          console.log("Calls startPub()");
+          this.$data.chName = 1;
+          this.startPub();
+        },
+        (err) => {
           console.error(err);
         }
       );
     },
 
-    offMic:  function() {
+    offMic() {
       if (!this.state.isMicOn) { return; }
 
       this.$data._stream.getTracks().forEach(function(t) { t.stop(); });
@@ -63,7 +71,7 @@ module.exports = {
       this.stopPub();
     },
 
-    toggleFilter: function() {
+    toggleFilter() {
       if (!this.state.isPub) { return; }
 
       var audio = this.$data._audio;
@@ -76,9 +84,11 @@ module.exports = {
       }
     },
 
-    startPub: function() {
+    startPub() {
       if (!this.state.isMicOn) { return; }
       if (this.state.isPub) { return; }
+
+      console.log("stratPub(): call postMessage to worker");
 
       this.state.isPub = true;
       this.$data._worker.postMessage({
@@ -87,7 +97,7 @@ module.exports = {
       });
     },
 
-    stopPub: function() {
+    stopPub() {
       if (!this.state.isPub) { return; }
 
       this.state.isPub = false;
@@ -133,7 +143,7 @@ module.exports = {
       this._drawInputSpectrum();
     },
 
-    _onAudioProcess: function(ev) {
+    _onAudioProcess(ev) {
       var inputBuffer  = ev.inputBuffer;
       var outputBuffer = ev.outputBuffer;
       var inputData  = inputBuffer.getChannelData(0);
@@ -149,7 +159,7 @@ module.exports = {
       }
     },
 
-    _drawInputSpectrum: function() {
+    _drawInputSpectrum() {
       if (!this.$data._audio.analyser) { return; }
 
       var analyser = this.$data._audio.analyser;
@@ -172,13 +182,10 @@ module.exports = {
       requestAnimationFrame(this._drawInputSpectrum);
     },
 
-    _hookCreated: function() {
-      var $data = this.$data;
-
-      $data._ctx = new window.AudioContext();
-
-      $data._worker = work(require('./worker.js'));
-      $data._worker.postMessage({
+    _hookCreated() {
+      this.$data._ctx = new window.AudioContext();
+      this.$data._worker = work(require('./worker.js'));
+      this.$data._worker.postMessage({
         type: 'INIT',
         data: {
           SOCKET_SERVER: SOCKET_SERVER
@@ -186,7 +193,7 @@ module.exports = {
       });
     },
 
-    _hookAttached: function() {
+    _hookAttached() {
       var $canvas = this.$els.canvas;
       $canvas.width  = window.innerWidth * 2;
       $canvas.height = $canvas.width / 10;
