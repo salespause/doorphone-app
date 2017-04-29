@@ -59,9 +59,9 @@ module.exports = {
     startSub() {
       if (this.state.isSub) { return; }
 
-      // Execute joining to the channel
       this.$data._worker.postMessage({ type: 'SUB_JOIN', data: this.chName });
       this.$data._worker.postMessage({ type: 'SUB_JOIN', data: this.chExchange });
+      this.$data._worker.postMessage({ type: 'AUDIO_ON' });
 
       this._readyAudio();
       this.state.isSub = true;
@@ -72,6 +72,7 @@ module.exports = {
 
       this.$data._worker.postMessage({ type: 'SUB_LEAVE', data: this.chName });
       this.$data._worker.postMessage({ type: 'SUB_LEAVE', data: this.chExchange });
+      this.$data._worker.postMessage({ type: 'AUDIO_OFF' });
 
       this._resetAudio();
       this.state.isSub = false;

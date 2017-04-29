@@ -11,10 +11,16 @@ module.exports = function(self) {
       _init(payload.data);
       break;
     case 'SUB_JOIN': // Execute joining to the channel
-      _subJoin(payload.data);
+      socket.emit('sub:join', payload.data);
       break;
     case 'SUB_LEAVE':
-      _subLeave(payload.data);
+      socket.emit('sub:leave', payload.data);
+      break;
+    case 'AUDIO_ON':
+      socket.on('audio', __handleAudioBufferMsg);
+      break;
+    case 'AUDIO_OFF':
+      socket.off('audio', __handleAudioBufferMsg);
       break;
     }
   });
@@ -40,16 +46,6 @@ module.exports = function(self) {
 
     // Registering a subscriber to the server
     socket.emit('sub:connect');
-  }
-
-  function _subJoin(data) {
-    socket.emit('sub:join', data);
-    socket.on('audio', __handleAudioBufferMsg);
-  }
-
-  function _subLeave(data) {
-    socket.emit('sub:leave', data);
-    socket.off('audio', __handleAudioBufferMsg);
   }
 
   function __handleAudioBufferMsg(buf) {
