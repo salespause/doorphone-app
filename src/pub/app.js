@@ -15,7 +15,7 @@ module.exports = {
     _ctx:    null,
 
     noFilter: true,
-    chName:   '1',
+    chName:   '1', // default
 
     _audio:  {
       source:    null,
