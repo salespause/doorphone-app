@@ -1,0 +1,6 @@
+---
+applications:
+  - name: salespause-phone
+    random-remote: true
+    memory: 256M
+    command: "npm run build && npm start"
