@@ -187,7 +187,7 @@ module.exports = {
 
             this.$data.state.isSubscriberJoined = true;
             this.$nextTick(() => {
-              this._setupSpectrumCanavas();
+              this._setupSpectrumCanvas();
               this._drawInputSpectrum();
             });
 
