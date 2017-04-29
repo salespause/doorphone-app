@@ -30,39 +30,35 @@ let ch  = Object.create({});
 
 // Varidate ENV vars
 if (!VAPID_SUBJECT) {
-	    return console.error('VAPID_SUBJECT environment variable not found.')
+  return console.error('VAPID_SUBJECT environment variable not found.')
 } else if (!VAPID_PUBLIC_KEY) {
-	    return console.error('VAPID_PUBLIC_KEY environment variable not found.')
+  return console.error('VAPID_PUBLIC_KEY environment variable not found.')
 } else if (!VAPID_PRIVATE_KEY) {
-	    return console.error('VAPID_PRIVATE_KEY environment variable not found.')
+  return console.error('VAPID_PRIVATE_KEY environment variable not found.')
 } else if (!AUTH_SECRET) {
-	    return console.error('AUTH_SECRET environment variable not found.')
+  return console.error('AUTH_SECRET environment variable not found.')
 }
 
-
 app.use("/app", express.static("dist"))
-
-app.get("/", (req, res) => {
-	res.redirect('/app/static/index.html');
-});
+app.use("/notificator_setting", express_statig("dist/notificator"));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 webPush.setVapidDetails(
-    VAPID_SUBJECT,
-    VAPID_PUBLIC_KEY,
-    VAPID_PRIVATE_KEY
+  VAPID_SUBJECT,
+  VAPID_PUBLIC_KEY,
+  VAPID_PRIVATE_KEY
 );
 
 app.get('/status', function (req, res) {
-    res.send('Server Running!');
+  res.send('Server Running!');
 });
 
 app.post('/status/sales', function (req, res) {
 	if(req.get('auth-secret') != AUTH_SECRET) {
 		return res.sendStatus(401);
-	} 
+	}
 	console.log(req.body)
 	console.log(isSales)
 	isSales = req.body['isSales'] || false;
@@ -72,12 +68,12 @@ app.post('/status/sales', function (req, res) {
 app.post('/status/types', function (req, res) {
 	if(req.get('auth-secret') != AUTH_SECRET) {
 		return res.sendStatus(401);
-	} 
+	}
 	console.log(req.body)
 	if (req.body['type'] == "random") {
 		let typeArray = ["friend", "neighbor", "danger"];
 		personType = typeArray[Math.floor(Math.random() * typeArray.length)];
-	console.log(personType)
+	  console.log(personType)
 	} else	{
 		personType = req.body['type'] || "friend";
 	}
@@ -85,11 +81,12 @@ app.post('/status/types', function (req, res) {
 });
 
 app.get('/notify/all', function (req, res) {
-    if((req.get('auth-secret') != AUTH_SECRET) || isSales) {
-        console.log("Missing or incorrect auth-secret header. or, She or He is sales. Rejecting request.");
-        return res.sendStatus(401);
-    }
-  let message; 
+  if ((req.get('auth-secret') != AUTH_SECRET) || isSales) {
+    console.log("Missing or incorrect auth-secret header. or, She or He is sales. Rejecting request.");
+    return res.sendStatus(401);
+  }
+
+  let message;
   let clickTarget;
 	let title;
 	let imgName;
@@ -97,18 +94,18 @@ app.get('/notify/all', function (req, res) {
 	switch (personType) {
 		case 'friend':
 			title = "お友達がいらっしゃいました!";
-			message = "楽しい時をお過ごしください。"; 
+			message = "楽しい時をお過ごしください。";
 			imgName = "friend.jpg";
 			break;
 		case 'neighbor':
 			title = "ご近所の方がいらっしゃいました！";
-			message = "地域のつながりを育みましょう。"; 
+			message = "地域のつながりを育みましょう。";
 			imgName = "neighbor.jpg";
 
 			break;
 		case 'danger':
 			title = "見知らぬお客様です。";
-			message = "訪問販売，詐欺には十分注意してください。"; 
+			message = "訪問販売，詐欺には十分注意してください。";
 			imgName = "danger.jpg";
 
 			break;
@@ -117,52 +114,46 @@ app.get('/notify/all', function (req, res) {
       title = req.query.title || `Push notification received!`;
       imgName = req.query.imgName || `FM_logo_2013.png`;
 	}
-	  clickTarget = req.query.clickTarget || `https://salespause-phone.au-syd.mybluemix.net/app/subscribe`;
-    subscribers.forEach(pushSubscription => {
-        //Can be anything you want. No specific structure necessary.
-        let payload = JSON.stringify({message : message, clickTarget: clickTarget, title: title, imgName: imgName});
 
-        webPush.sendNotification(pushSubscription, payload, {}).then((response) =>{
-            console.log("Status : "+util.inspect(response.statusCode));
-            console.log("Headers : "+JSON.stringify(response.headers));
-            console.log("Body : "+JSON.stringify(response.body));
-        }).catch((error) =>{
-            console.log("Status : "+util.inspect(error.statusCode));
-            console.log("Headers : "+JSON.stringify(error.headers));
-            console.log("Body : "+JSON.stringify(error.body));
-        });
+  clickTarget = req.query.clickTarget || `https://salespause-phone.au-syd.mybluemix.net/app/subscribe`;
+  subscribers.forEach(pushSubscription => {
+    const payload = JSON.stringify({ message : message, clickTarget: clickTarget, title: title, imgName: imgName });
+
+    webPush.sendNotification(pushSubscription, payload, {}).then((response) =>{
+      console.log("Status : "+util.inspect(response.statusCode));
+      console.log("Headers : "+JSON.stringify(response.headers));
+      console.log("Body : "+JSON.stringify(response.body));
+    }).catch((error) =>{
+      console.log("Status : "+util.inspect(error.statusCode));
+      console.log("Headers : "+JSON.stringify(error.headers));
+      console.log("Body : "+JSON.stringify(error.body));
     });
+  });
 
-    res.send('Notification sent!');
+  res.send('Notification sent!');
 });
 
 app.post('/subscribe', function (req, res) {
-    let endpoint = req.body['notificationEndPoint'];
-    let publicKey = req.body['publicKey'];
-    let auth = req.body['auth'];
-    
-    let pushSubscription = {
-        endpoint: endpoint,
-        keys: {
-            p256dh: publicKey,
-            auth: auth
-        }
-    };
+  let endpoint = req.body['notificationEndPoint'];
+  let publicKey = req.body['publicKey'];
+  let auth = req.body['auth'];
+  let pushSubscription = {
+    endpoint: endpoint,
+    keys: {
+      p256dh: publicKey,
+      auth: auth
+    }
+  };
 
-    subscribers.push(pushSubscription);
-
-    res.send('Subscription accepted!');
+  subscribers.push(pushSubscription);
+  res.send('Subscription accepted!');
 });
 
 app.post('/unsubscribe', function (req, res) {
-    let endpoint = req.body['notificationEndPoint'];
-    
-    subscribers = subscribers.filter(subscriber => { endpoint == subscriber.endpoint });
-
-    res.send('Subscription removed!');
+  let endpoint = req.body['notificationEndPoint'];
+  subscribers = subscribers.filter(subscriber => { endpoint == subscriber.endpoint });
+  res.send('Subscription removed!');
 });
-
-
 
 io.on('connection', (socket) => {
   let socketId = socket.id;
