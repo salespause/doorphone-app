@@ -49,18 +49,16 @@ module.exports = {
     onMic() {
       if (this.state.isMicOn) { return; }
 
-      /*
       navigator.getUserMedia({ audio: true }, (stream) => {
         this._onMicStream(stream);
         this.startPub();
       }, (err) => {
         console.error(err);
       });
-      */
 
       // DEBUG!!!!!!!
-      this.state.isMicOn = true;
-      this.startPub();
+      // this.state.isMicOn = true;
+      // this.startPub();
 
     },
 
