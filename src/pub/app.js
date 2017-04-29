@@ -12,8 +12,11 @@ module.exports = {
   data: {
     _ctx:    null,
     _worker: null,
-
     _stream: null,
+    _startTime: 0,
+
+    ch:     {},
+    volume: 50,
 
     chName: '1',     // default
     chExchange: '2', // exchange

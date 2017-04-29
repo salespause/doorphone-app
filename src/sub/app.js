@@ -12,7 +12,7 @@ module.exports = {
   data: {
     _ctx:    null,
     _worker: null,
-
+    _stream: null,
     _startTime: 0,
 
     ch:     {},
@@ -21,8 +21,12 @@ module.exports = {
     chName: '1',     // default
     chExchange: '2', // exchange
 
-    _audio: {
-      gain: null
+    _audio:  {
+      source:    null,
+      processor: null,
+      filter:    null,
+      analyser:  null,
+      gain:      null
     },
 
     state: {
