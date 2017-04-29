@@ -3,9 +3,7 @@
 const util  = require('../common/util');
 const work = require('webworkify');
 
-const _params = new URLSearchParams(location.search)
-const uv4lTargeHost = _params.get("h")
-const SOCKET_SERVER = (uv4lTargeHost || `${location.protocol}//${location.host}`);
+const SOCKET_SERVER = `${location.protocol}//${location.host}`
 const BUFFER_SIZE = 1024;
 
 module.exports = {
@@ -30,8 +28,14 @@ module.exports = {
   },
 
   computed: {
-    hasCh: function() {
+    hasCh() {
       return Object.keys(this.ch).length !== 0;
+    },
+
+    uv4lHost() {
+      const _params = new URLSearchParams(location.search);
+      const _host = _params.get("h");
+      return `${host}/stream/video.h264`
     }
   },
 
