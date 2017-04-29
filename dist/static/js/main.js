@@ -1,4 +1,6 @@
-var url = 'http://localhost:8080/subscribe';
+var url = location.hostname + '/subscribe';
+// debug purpose
+// var url = location.hostname + '8080/subscribe';
 
 //Vapid public key.
 var applicationServerPublicKey = 'BBFpyJxiW0kRzE1l7a5jECOCtvYsEK5lOI6DXvKkIeyztqIPPBUCCMAwOIwQZaDKPWhRgTDq7WIQ2sNTjaPQoBo';
