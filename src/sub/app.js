@@ -136,7 +136,6 @@ module.exports = {
 
     _resetAudio() {
       util.disconnectAll(this.$data._audio);
-      util.unwatchAll(this.$data._watch);
     },
 
     _onChangeVolume(val) {
@@ -175,6 +174,25 @@ module.exports = {
       audio.processor.connect(audio.analyser);
       audio.processor.connect(audio.gain);
       audio.gain.connect(ctx.destination);
-    }
+    },
+
+    //
+    // The handler of onaudioprocess
+    //
+    _onAudioProcess(ev) {
+      const inputBuffer  = ev.inputBuffer;
+      const outputBuffer = ev.outputBuffer;
+      const inputData  = inputBuffer.getChannelData(0);
+      const outputData = outputBuffer.getChannelData(0);
+
+      // Bypassしつつ飛ばす
+      outputData.set(inputData);
+      if (this.state.isPub) {
+        this.$data._worker.postMessage({
+          type: 'AUDIO',
+          data: { buf: outputData.buffer, ch: this.chName }
+        });
+      }
+    },
   }
 };
