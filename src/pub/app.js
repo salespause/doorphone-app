@@ -60,6 +60,7 @@ module.exports = {
 
     offMic() {
       if (!this.state.isMicOn) { return; }
+
       this.$data._stream.getTracks().forEach(function(t) { t.stop(); });
       this.$data._stream = null;
       this.state.isMicOn = false;
@@ -69,14 +70,10 @@ module.exports = {
     },
 
     startPub() {
-      if (!this.state.isMicOn) { return; }
-      if (this.state.isPub) { return; }
-
+      if (!this.state.isMicOn || this.state.isPub) { return; }
+      this.$data._worker.postMessage({ type: 'CH', data: this.chName });
+      this.$data._worker.postMessage({ type: 'CH', data: this.chExchange });
       this.state.isPub = true;
-      this.$data._worker.postMessage({
-        type: 'CH',
-        data: this.chName
-      });
     },
 
     stopPub() {

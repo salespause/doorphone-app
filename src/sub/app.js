@@ -25,10 +25,6 @@ module.exports = {
       gain: null
     },
 
-    _watch: {
-      volume: null
-    },
-
     state: {
       isSub: false,
       isPublisherReady: false
@@ -64,10 +60,8 @@ module.exports = {
       if (this.state.isSub) { return; }
 
       // Execute joining to the channel
-      this.$data._worker.postMessage({
-        type: 'SUB_JOIN',
-        data: this.chName
-      });
+      this.$data._worker.postMessage({ type: 'SUB_JOIN', data: this.chName });
+      this.$data._worker.postMessage({ type: 'SUB_JOIN', data: this.chExchange });
 
       this._readyAudio();
       this.state.isSub = true;
@@ -76,10 +70,8 @@ module.exports = {
     stopSub() {
       if (!this.state.isSub) { return; }
 
-      this.$data._worker.postMessage({
-        type: 'SUB_LEAVE',
-        data: this.chName
-      });
+      this.$data._worker.postMessage({ type: 'SUB_LEAVE', data: this.chName });
+      this.$data._worker.postMessage({ type: 'SUB_LEAVE', data: this.chExchange });
 
       this._resetAudio();
       this.state.isSub = false;
@@ -135,8 +127,6 @@ module.exports = {
       audio.gain = ctx.createGain();
       audio.gain.gain.value = this.volume;
       audio.gain.connect(ctx.destination);
-
-      this.$data._watch.volume = this.$watch('volume', this._onChangeVolume);
     },
 
     _resetAudio() {
