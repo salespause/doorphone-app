@@ -5,10 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <title>Welcome</title>
     <link ref="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/6.0.0/normalize.min.css" />
+    <style>
+      body {
+        user-select: none;
+      }
+      .container {
+        text-align: center;
+      }
+      .subscribe-btn {
+        background-color: dodgerblue;
+        color: white;
+        padding: 50px 100px;
+        text-decoration: none;
+        box-shadow: black 1px 1px 1px;
+        line-height: 10;
+
+      }
+      .subscribe-btn:active {
+        background-color: orange;
+      }
+    </style>
   </head>
   <body>
-    <a href="/app/subscribe">
-      通話する
-    </a>
+    <div class="container">
+      <a class="subscribe-btn" href="/app/subscribe">
+        Make a call
+      </a>
+    </div>
   </body>
 </html>
