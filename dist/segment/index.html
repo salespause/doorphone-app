@@ -4,11 +4,77 @@
     <meta charset="utf-8" />
     <title>Segment</title>
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/6.0.0/normalize.min.css" />
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Orbitron" />
     <style>
-      /* todo */
+      html, body {
+        font-family: 'Orbitron', sans-serif;
+        user-select: none;
+        background-color: black;
+      }
+      .subscribe-btn {
+        display: block;
+        background-color: dodgerblue;
+        color: white;
+        padding: 10px 100px;
+        text-decoration: none;
+        box-shadow: grey 5px 5px 1px;
+        font-size: 60px;
+        margin-bottom: 20px;
+      }
+      .subscribe-btn:active {
+        background-color: orange;
+      }
+      .container {
+        text-align: center;
+      }
+      .container p {
+        color: white;
+        font-size: 40px;
+      }
     </style>
   </head>
   <body>
+    <div class="container">
+      <p>Select your visiting segment from below</p>
 
+      <a class="subscribe-btn" href="#" onclick="postFriends()">
+        Friends
+      </a>
+      <a class="subscribe-btn" href="#" onclick="postNeighbor()">
+        Neighbor
+      </a>
+      <a class="subscribe-btn" href="#" onclick="postDanger()">
+        Sales
+      </a>
+      <a class="subscribe-btn" href="#" onclick="postRandom()">
+        Other
+      </a>
+    </div>
   </body>
+  <script>
+    function doStatusPost(type) {
+      const host = `${location.protocol}//${location.host}`
+      const http = new XMLHttpRequest();
+
+      typeData = ["friend", "neighbor", "danger", "random"]
+      if (type < 4) {
+        console.log(typeData[type])
+        typePost = "type=" + typeData[type]
+      } else {
+        typePost = "type=none"
+      }
+
+      http.open("post", host + "/status/types", true);
+      http.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+      http.setRequestHeader("auth-secret", "dekitango");
+      http.send(typePost);
+
+      location.href = "/app/publish";
+    };
+
+    function postFriends() { doStatusPost(0); }
+    function postNeighbor() { doStatusPost(1); }
+    function postDanger() { $doStatusPost(2); }
+    function postRandom() { doStatusPost(3); }
+  </script>
 </html>
