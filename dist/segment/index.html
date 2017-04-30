@@ -4,11 +4,51 @@
     <meta charset="utf-8" />
     <title>Segment</title>
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/6.0.0/normalize.min.css" />
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Orbitron" />
     <style>
-      /* todo */
+      html, body {
+        font-family: 'Orbitron', sans-serif;
+        user-select: none;
+        background-color: black;
+      }
+      .subscribe-btn {
+        display: block;
+        background-color: dodgerblue;
+        color: white;
+        padding: 10px 100px;
+        text-decoration: none;
+        box-shadow: grey 5px 5px 1px;
+        font-size: 60px;
+        margin-bottom: 20px;
+      }
+      .subscribe-btn:active {
+        background-color: orange;
+      }
+      .container {
+        text-align: center;
+      }
+      .container p {
+        color: white;
+        font-size: 40px;
+      }
     </style>
   </head>
   <body>
+    <div class="container">
+      <p>Select your visiting segment from below</p>
 
+      <a class="subscribe-btn" href="#">
+        Friends or family
+      </a>
+      <a class="subscribe-btn" href="#">
+        Delivery
+      </a>
+      <a class="subscribe-btn" href="#">
+        Sales
+      </a>
+      <a class="subscribe-btn" href="#">
+        Other
+      </a>
+    </div>
   </body>
 </html>
