@@ -93,6 +93,8 @@ module.exports = {
 
       this._resetAudio();
       this.state.isSub = false;
+
+      location.reload();
     },
 
     _handleAudioBuffer(buf) {
