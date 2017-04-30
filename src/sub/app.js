@@ -43,7 +43,7 @@ module.exports = {
     uv4lHost() {
       const _params = new URLSearchParams(location.search);
       const _host = _params.get("h");
-      return `${_host}/stream/video.h264`
+      return `${_host}/stream/video.mjpeg`
     }
   },
 
