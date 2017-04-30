@@ -37,18 +37,44 @@
     <div class="container">
       <p>Select your visiting segment from below</p>
 
-      <a class="subscribe-btn" href="#">
-        Friends or family
+      <a class="subscribe-btn" href="#" onclick="postFriends()">
+        Friends
       </a>
-      <a class="subscribe-btn" href="#">
-        Delivery
+      <a class="subscribe-btn" href="#" onclick="postNeighbor()">
+        Neighbor
       </a>
-      <a class="subscribe-btn" href="#">
+      <a class="subscribe-btn" href="#" onclick="postDanger()">
         Sales
       </a>
-      <a class="subscribe-btn" href="#">
+      <a class="subscribe-btn" href="#" onclick="postRandom()">
         Other
       </a>
     </div>
   </body>
+  <script>
+    function doStatusPost(type) {
+      const host = `${location.protocol}//${location.host}`
+      const http = new XMLHttpRequest();
+
+      typeData = ["friend", "neighbor", "danger", "random"]
+      if (type < 4) {
+        console.log(typeData[type])
+        typePost = "type=" + typeData[type]
+      } else {
+        typePost = "type=none"
+      }
+
+      http.open("post", host + "/status/types", true);
+      http.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+      http.setRequestHeader("auth-secret", "dekitango");
+      http.send(typePost);
+
+      location.href = "/app/publish";
+    };
+
+    function postFriends() { doStatusPost(0); }
+    function postNeighbor() { doStatusPost(1); }
+    function postDanger() { $doStatusPost(2); }
+    function postRandom() { doStatusPost(3); }
+  </script>
 </html>
