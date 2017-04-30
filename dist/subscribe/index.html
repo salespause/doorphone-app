@@ -21,21 +21,24 @@
 
   <body>
     <section id="jsSubApp" class="container">
-      <img id="visitor-streaming" v-bind:src="uv4lHost" />
+      <div>
+        <img id="visitor-streaming" v-bind:src="uv4lHost" />
+      </div>
 
-      <button
-        class="button"
-        :class="{ 'button-outline': !state.isSub }"
-        :disabled="state.isSub || !state.isPublisherReady"
-        @click="startSub"
-      >Start</button>
-      <button
-        class="button"
-        :class="{ 'button-outline': state.isSub }"
-        :disabled="!state.isSub"
-        @click="stopSub"
-      >Stop</button>
-
+      <div style="margin-top: 10px">
+        <button
+          class="button"
+          :class="{ 'button-outline': !state.isSub }"
+          :disabled="state.isSub || !state.isPublisherReady"
+          @click="startSub"
+        >Start</button>
+        <button
+          class="button"
+          :class="{ 'button-outline': state.isSub }"
+          :disabled="!state.isSub"
+          @click="stopSub"
+        >Stop</button>
+      </div>
     </section>
     <script src="./app.js"></script>
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" />
