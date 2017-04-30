@@ -21,19 +21,23 @@
 
   <body>
     <section id="jsSubApp" class="container">
-      <div>
+      <div style="margin-top: 10px">
         <img id="visitor-streaming" v-bind:src="uv4lHost" />
+      </div>
+
+      <div v-show="state.isPublisherReady">
+        Doorphone is now being called...
       </div>
 
       <div style="margin-top: 10px">
         <button
-          class="button"
+          class="btn btn-success"
           :class="{ 'button-outline': !state.isSub }"
           :disabled="state.isSub || !state.isPublisherReady"
           @click="startSub"
         >Start</button>
         <button
-          class="button"
+          class="btn btn-danger"
           :class="{ 'button-outline': state.isSub }"
           :disabled="!state.isSub"
           @click="stopSub"
